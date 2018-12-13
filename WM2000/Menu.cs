@@ -1,87 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-
-public class Game
-{
-	List<string> locations = new List<string>() {"School", "Gym", "Church"};
-	List<string> locationPasswords = new List<string>() { "cea3rdfloor", "barbel145", "GODiswithUS" };
-
-	private int StepNumber = 1;
-	private int GameLevel;
-
-	public void DisplayMainMenu()
-	{
-		Terminal.ClearScreen();
-		Terminal.WriteLine("What would you like to hack into? \n");
-
-		for (int i = 0; i < locations.Count; i++)
-		{
-			Terminal.WriteLine("Press " + (i+1) + " : to enter " + locations[i]);
-		}
-		
-	}
-
-	public void DisplayLogonScreen()
-	{
-		Terminal.ClearScreen();
-		Terminal.WriteLine("Level " + this.GameLevel + " : " + locations[this.GameLevel-1]);
-		Terminal.WriteLine("\n Enter the level password");
-	}
-
-	public void DisplayWinScreen()
-	{
-		Terminal.ClearScreen();
-		Terminal.WriteLine("You won");
-	}
-
-	public void ValidateLevel(string input)
-	{
-		if (input == "1" || input == "2" || input == "3")
-		{
-			Terminal.WriteLine("You’ve chosen level " + input);
-			this.GameLevel = int.Parse(input);
-			GoToStep(2);
-			DisplayLogonScreen();
-		}
-		else if (input == "menu")
-		{
-			DisplayMainMenu();
-		}
-		else if (input == "007")
-		{
-			Terminal.WriteLine("Welcome James Bond, select a level");
-		}
-		else
-		{
-			Terminal.WriteLine("Please enter a valid level");
-		}
-	}
-
-	public bool ValidatePassword(string input)
-	{
-		if (this.locationPasswords[this.GameLevel - 1] == input)
-		{
-			return true;
-		}
-		return false;
-	}
-
-	public void GoToStep(int step)
-	{
-		this.StepNumber = step;
-	}
-
-	public int ReturnStep()
-	{
-		return this.StepNumber;
-	}
-
-
-
-}
+﻿using UnityEngine;
 
 
 public class Menu : MonoBehaviour
@@ -90,11 +7,12 @@ public class Menu : MonoBehaviour
 	Game OldSchoolHacker = new Game();
 	void Start()
 	{
-		OldSchoolHacker.DisplayMainMenu();
+		OldSchoolHacker.DisplayMainMenu("Hi Barry");
 	}
 
 	void OnUserInput(string input)
 	{
+		print(input);
 		var stepNumber = OldSchoolHacker.ReturnStep();
 
 		if (stepNumber == 1)
@@ -111,14 +29,19 @@ public class Menu : MonoBehaviour
 			}
 			else if (input == "menu")
 			{
-				OldSchoolHacker.GoToStep(1);
-				OldSchoolHacker.DisplayMainMenu();
+				OldSchoolHacker.DisplayMainMenu("Hi to you ...");
 			}
 			else
 			{
-				OldSchoolHacker.DisplayLogonScreen();
+				OldSchoolHacker.DisplayLogonScreen("Wrong password, Try again");
 			}
 		}
+
+		if (stepNumber == 3)
+		{
+			OldSchoolHacker.DisplayMainMenu("Hello Edrian");
+		}
+
 
 	}
 	// Update is called once per frame
