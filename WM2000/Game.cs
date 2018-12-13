@@ -4,24 +4,28 @@ using System.Text;
 
 public class Game
 {
+
 	readonly Random random = new Random();
+
+	private int StepNumber;
+	private int GameLevel;
+	private string JambledPassword;
+	private string CurrentPassword;
+
 	enum Locations
 	{
 		Classroom = 1,
 		University_Hall = 2,
 		Chemistry_Lab = 3
 	}
+
 	private string[,] Passwords = new string[3, 5]
 	{
-		{"blackboard","notebook","armchair","table","ballpen"},
-		{"podium","spotlight","curtains","backdrop","microphone"},
-		{"erlenmeyer","crucible","forcep","thermometer","bunsen burner"}
+		{"whiteboard","notebook","armchair","table","ballpen"},				// Classroom passwords
+		{"podium","spotlight","curtains","backdrop","microphone"},			// University Hall
+		{"erlenmeyer","crucible","forcep","thermometer","bunsen burner"}	// Chemistry Lab	
 	};
 
-	private int StepNumber;
-	private int GameLevel;
-	private string JambledPassword;
-	private string CurrentPassword;
 
 	public Game()
 	{
@@ -29,35 +33,50 @@ public class Game
 		GameLevel = 0;
 	}
 	
+
 	public void DisplayMainMenu(string greeting)
 	{
 		this.StepNumber = 1;
 		Terminal.ClearScreen();
-		Terminal.WriteLine(greeting);
+		Terminal.WriteLine(greeting + "\n");
+		Terminal.WriteLine("--------------------------------------");
 		Terminal.WriteLine("What would you like to hack into? \n");
-
-		Terminal.WriteLine("Press 1 : to enter Classroom");
-		Terminal.WriteLine("Press 2 : to enter University Hall");
-		Terminal.WriteLine("Press 3 : to enter Chemistry Lab");		
-		
+		Terminal.WriteLine("Press 1 : Classroom");
+		Terminal.WriteLine("Press 2 : University Hall");
+		Terminal.WriteLine("Press 3 : Chemistry Lab");		
+		Terminal.WriteLine("--------------------------------------");
+		Terminal.WriteLine("Enter your selection : ");
 	}
-	
+
 
 	public void DisplayLogonScreen(string message)
 	{  
 		this.StepNumber = 2;
+		var randomNum = random.Next(0, 5);
+		CurrentPassword = Passwords[(GameLevel - 1), randomNum];
+		JambledPassword = JambleTheWord(CurrentPassword);
+
 		Terminal.ClearScreen();
-		Terminal.WriteLine("Level " + this.GameLevel + " : " + (Locations) GameLevel + "\n");
+		Terminal.WriteLine("--------------------------------------");
+		Terminal.WriteLine("Level " + this.GameLevel + " : " + (Locations) GameLevel);
+		Terminal.WriteLine("--------------------------------------\n");
+
 		Terminal.WriteLine(message);
 		Terminal.WriteLine("Enter the level password");
 		Terminal.WriteLine("Hint : " + JambledPassword);
 	}
 
+
 	public void DisplayWinScreen()
 	{
 		this.StepNumber = 3;
 		Terminal.ClearScreen();
-		Terminal.WriteLine(" You won \n Enter anything to restart");
+		Terminal.WriteLine("\t------------------------------");
+		Terminal.WriteLine("\t\t\t" + ((Locations) GameLevel).ToString().ToUpper());
+		Terminal.WriteLine("\t\t\tACCESS GRANTED");
+		Terminal.WriteLine("\t------------------------------");
+		Terminal.WriteLine("\n\nenter anything...");
+
 	}
 
 	public void ValidateLevel(string input)
@@ -74,10 +93,7 @@ public class Game
 		{
 			this.GameLevel = int.Parse(input);
 			Terminal.WriteLine("You’ve chosen level " + input);
-			var randomNum = random.Next(0, 5);
-			CurrentPassword = Passwords[(GameLevel - 1), randomNum];
-			JambledPassword = JambleTheWord(CurrentPassword);
-			DisplayLogonScreen("Guess the jambled words");
+			DisplayLogonScreen("Welcome master");
 		}
 		else
 		{
@@ -100,6 +116,8 @@ public class Game
 	}
 
 	
+
+
 	public string JambleTheWord(string word)
 	{
 		
@@ -109,7 +127,7 @@ public class Game
 
 		if (word.Contains(" "))
 		{
-			string[] words = word.Split(' ');
+			var words = word.Split(' ');
 			foreach (var _word in words)
 			{
 				jambledWord.Insert(jambledWord.Length, JambleTheWord(_word) + " ");
