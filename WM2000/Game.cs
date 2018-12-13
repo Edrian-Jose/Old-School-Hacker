@@ -21,7 +21,7 @@ public class Game
 
 	private string[,] Passwords = new string[3, 5]
 	{
-		{"whiteboard","notebook","armchair","table","ballpen"},				// Classroom passwords
+		{"white board","notebook","armchair","table","ballpen"},			// Classroom passwords
 		{"podium","spotlight","curtains","backdrop","microphone"},			// University Hall
 		{"erlenmeyer","crucible","forcep","thermometer","bunsen burner"}	// Chemistry Lab	
 	};
@@ -135,19 +135,7 @@ public class Game
 		}
 		else
 		{
-			int indexer;
-
-			for (int i = 0; i < unJambledWord.Length; i++)
-			{
-				do
-				{
-					indexer = random.Next(0, (unJambledWord.Length));
-				} while ((replacedIndex.Contains(indexer) && replacedIndex.Count != unJambledWord.Length));
-
-				jambledWord.Append(unJambledWord[indexer]);
-				replacedIndex.Add(indexer);
-
-			}
+			jambledWord.Insert(0,word.Anagram());
 		}
 		
 
