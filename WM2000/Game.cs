@@ -177,9 +177,7 @@ public class Game
 	public string JambleTheWord(string word)
 	{
 		
-		var unJambledWord = new StringBuilder(word);
 		var jambledWord = new StringBuilder();
-		var replacedIndex = new List<int>();
 
 		if (word.Contains(" "))
 		{
