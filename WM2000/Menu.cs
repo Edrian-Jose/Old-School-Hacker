@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 
 
 public class Menu : MonoBehaviour
@@ -7,42 +8,42 @@ public class Menu : MonoBehaviour
 	Game OldSchoolHacker = new Game();
 	void Start()
 	{
-		OldSchoolHacker.DisplayMainMenu("Hi Barry");
+		OldSchoolHacker.DisplayWelcomeScreen();
 	}
 
 	void OnUserInput(string input)
 	{
 		print(input);
 		var stepNumber = OldSchoolHacker.ReturnStep();
-
-		if (stepNumber == 1)
+		if (stepNumber == 0 && input == "menu")
+		{
+			OldSchoolHacker.DisplayMenuScreen("Hi barry");
+		}
+		else if (stepNumber == 1)
 		{
 			OldSchoolHacker.ValidateLevel(input);
 		}
 
-		if (stepNumber == 2)
+		else if (stepNumber == 2)
 		{
 			var remark = OldSchoolHacker.ValidatePassword(input);
 			if (remark)
 			{
 				OldSchoolHacker.DisplayWinScreen();
 			}
-			else if (input == "menu")
+			else if (OldSchoolHacker.Screens.Contains(input))
 			{
-				OldSchoolHacker.DisplayMainMenu("Hi to you ...");
+				OldSchoolHacker.DisplayScreen(input);
 			}
 			else
 			{
 				OldSchoolHacker.DisplayLogonScreen("Wrong password, Try again");
 			}
 		}
-
-		if (stepNumber == 3)
+		else
 		{
-			OldSchoolHacker.DisplayMainMenu("Hello Edrian");
+			OldSchoolHacker.DisplayWelcomeScreen();
 		}
-
-
 	}
 	// Update is called once per frame
 	void Update()

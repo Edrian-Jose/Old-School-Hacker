@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 public class Game
@@ -26,26 +27,45 @@ public class Game
 		{"erlenmeyer","crucible","forcep","thermometer","bunsen burner"}	// Chemistry Lab	
 	};
 
+	public string[] Screens = new string[] {"help", "menu", "exit", "?"};
 
 	public Game()
 	{
-		StepNumber = 1;
+		StepNumber = 0;
 		GameLevel = 0;
 	}
-	
 
-	public void DisplayMainMenu(string greeting)
+	public void DisplayWelcomeScreen()
+	{
+		this.StepNumber = 0;
+		this.GameLevel = 0;
+		Terminal.ClearScreen();
+		Terminal.WriteLine("      WELCOME TO HACKER GAME ONLINE!");
+		Terminal.WriteLine("	      ____________________	");
+		Terminal.WriteLine("	     |	 ____      ____   |	");
+		Terminal.WriteLine("	     |  |    |    |    |  |	");
+		Terminal.WriteLine("	     |  |____|    |____|  |	");
+		Terminal.WriteLine("	     |                    |	");
+		Terminal.WriteLine("	     |        ____        |	");
+		Terminal.WriteLine("	     |        \\__/        |	");
+		Terminal.WriteLine("	     |____________________|	");
+		Terminal.WriteLine("\n     Enter \"menu\" to start the game");
+
+	}
+
+	public void DisplayMenuScreen(string greeting)
 	{
 		this.StepNumber = 1;
 		Terminal.ClearScreen();
 		Terminal.WriteLine(greeting + "\n");
 		Terminal.WriteLine("--------------------------------------");
 		Terminal.WriteLine("What would you like to hack into? \n");
-		Terminal.WriteLine("Press 1 : Classroom");
-		Terminal.WriteLine("Press 2 : University Hall");
-		Terminal.WriteLine("Press 3 : Chemistry Lab");		
+		Terminal.WriteLine("Enter 1 : Classroom");
+		Terminal.WriteLine("Enter 2 : University Hall");
+		Terminal.WriteLine("Enter 3 : Chemistry Lab");		
 		Terminal.WriteLine("--------------------------------------");
-		Terminal.WriteLine("Enter your selection : ");
+		Terminal.WriteLine("Enter \"menu\" or \"?\" for help ");
+		Terminal.WriteLine("Enter your selection below: ");
 	}
 
 
@@ -64,6 +84,8 @@ public class Game
 		Terminal.WriteLine(message);
 		Terminal.WriteLine("Enter the level password");
 		Terminal.WriteLine("Hint : " + JambledPassword);
+		Terminal.WriteLine("Enter \"menu\" or \"?\" for help ");
+
 	}
 
 
@@ -71,33 +93,67 @@ public class Game
 	{
 		this.StepNumber = 3;
 		Terminal.ClearScreen();
-		Terminal.WriteLine("\t------------------------------");
-		Terminal.WriteLine("\t\t\t" + ((Locations) GameLevel).ToString().ToUpper());
-		Terminal.WriteLine("\t\t\tACCESS GRANTED");
-		Terminal.WriteLine("\t------------------------------");
-		Terminal.WriteLine("\n\nenter anything...");
+		Terminal.WriteLine("             _______________       ");
+		Terminal.WriteLine("        ____|              |____  ");
+		Terminal.WriteLine("        \\   |              |   /   ");
+		Terminal.WriteLine("         \\__|    YOU WON   |__/    ");
+		Terminal.WriteLine("            \\              /       ");
+		Terminal.WriteLine("             \\____________/         ");
+		Terminal.WriteLine("   	 	         |    |              ");
+		Terminal.WriteLine("	          ___|____|___         ");
+		Terminal.WriteLine("	          |          |          ");
+		Terminal.WriteLine("	          |__________|          ");
+		Terminal.WriteLine("      enter anything to restart...");
 
 	}
 
-	public void ValidateLevel(string input)
+	public void DisplayHelpScreen()
+	{
+
+		Terminal.ClearScreen();
+		Terminal.WriteLine("List of selection you can enter \n");
+		Terminal.WriteLine("Help / ? : Go to Help Screen");
+		Terminal.WriteLine("menu     : Go to Menu Screen");
+		Terminal.WriteLine("exit     : Exit the Game");
+		if (StepNumber == 1)
+		{
+			Terminal.WriteLine("1 / 2 / 3: Go to selected level");
+		}
+	}
+
+	public void DisplayScreen(string input)
 	{
 		if (input == "menu")
 		{
-			DisplayMainMenu("Hello again ..");
+			DisplayMenuScreen("Hello again ..");
+		}
+		else if (input == "help" || input == "?")
+		{
+			DisplayHelpScreen();
+		}
+		else if (input == "exit")
+		{
+			DisplayWelcomeScreen();
+		}
+	}
+	public void ValidateLevel(string input)
+	{
+		if (Screens.Contains(input))
+		{
+			DisplayScreen(input);
 		}
 		else if (input == "007")
 		{
-			DisplayMainMenu("Hola Mr. James Bond");
+			DisplayMenuScreen("Hola Mr. James Bond");
 		}
 		else if (input == "3" || input == "2" || input == "1")
 		{
 			this.GameLevel = int.Parse(input);
-			Terminal.WriteLine("You’ve chosen level " + input);
 			DisplayLogonScreen("Welcome master");
 		}
 		else
 		{
-			Terminal.WriteLine("Please enter a valid level");
+			Terminal.WriteLine("Please enter a valid selection");
 		}
 	}
 
