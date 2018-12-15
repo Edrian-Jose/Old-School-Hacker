@@ -1,12 +1,62 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using UnityEngine;
+using System;
 using System.Text;
+using System.Linq;
+
+public class Hacker : MonoBehaviour
+{
+	// Use this for initialization
+	Game OldSchoolHacker = new Game();
+	void Start()
+	{
+		OldSchoolHacker.DisplayWelcomeScreen();
+	}
+
+	void OnUserInput(string input)
+	{
+		print(input);
+		var stepNumber = OldSchoolHacker.ReturnStep();
+		if (stepNumber == 0 && input == "menu")
+		{
+			OldSchoolHacker.DisplayMenuScreen("Hi barry");
+		}
+		else if (stepNumber == 1)
+		{
+			OldSchoolHacker.ValidateLevel(input);
+		}
+
+		else if (stepNumber == 2)
+		{
+			var remark = OldSchoolHacker.ValidatePassword(input);
+			if (remark)
+			{
+				OldSchoolHacker.DisplayWinScreen();
+			}
+			else if (OldSchoolHacker.Screens.Contains(input))
+			{
+				OldSchoolHacker.DisplayScreen(input);
+			}
+			else
+			{
+				OldSchoolHacker.DisplayLogonScreen("Wrong password, Try again");
+			}
+		}
+		else
+		{
+			OldSchoolHacker.DisplayWelcomeScreen();
+		}
+	}
+	// Update is called once per frame
+	void Update()
+	{
+
+	}
+}
 
 public class Game
 {
 
-	readonly Random random = new Random();
+	readonly System.Random random = new System.Random();
 
 	private int StepNumber;
 	private int GameLevel;
@@ -27,7 +77,7 @@ public class Game
 		{"erlenmeyer","crucible","forcep","thermometer","bunsen burner"}	// Chemistry Lab	
 	};
 
-	public string[] Screens = new string[] {"help", "menu", "exit", "?"};
+	public string[] Screens = new string[] { "help", "menu", "exit", "?" };
 
 	public Game()
 	{
@@ -62,7 +112,7 @@ public class Game
 		Terminal.WriteLine("What would you like to hack into? \n");
 		Terminal.WriteLine("Enter 1 : Classroom");
 		Terminal.WriteLine("Enter 2 : University Hall");
-		Terminal.WriteLine("Enter 3 : Chemistry Lab");		
+		Terminal.WriteLine("Enter 3 : Chemistry Lab");
 		Terminal.WriteLine("--------------------------------------");
 		Terminal.WriteLine("Enter \"menu\" or \"?\" for help ");
 		Terminal.WriteLine("Enter your selection below: ");
@@ -70,7 +120,7 @@ public class Game
 
 
 	public void DisplayLogonScreen(string message)
-	{  
+	{
 		this.StepNumber = 2;
 		var randomNum = random.Next(0, 5);
 		CurrentPassword = Passwords[(GameLevel - 1), randomNum];
@@ -78,7 +128,7 @@ public class Game
 
 		Terminal.ClearScreen();
 		Terminal.WriteLine("--------------------------------------");
-		Terminal.WriteLine("Level " + this.GameLevel + " : " + (Locations) GameLevel);
+		Terminal.WriteLine("Level " + this.GameLevel + " : " + (Locations)GameLevel);
 		Terminal.WriteLine("--------------------------------------\n");
 
 		Terminal.WriteLine(message);
@@ -171,12 +221,12 @@ public class Game
 		return this.StepNumber;
 	}
 
-	
+
 
 
 	public string JambleTheWord(string word)
 	{
-		
+
 		var jambledWord = new StringBuilder();
 
 		if (word.Contains(" "))
@@ -189,11 +239,12 @@ public class Game
 		}
 		else
 		{
-			jambledWord.Insert(0,word.Anagram());
+			jambledWord.Insert(0, word.Anagram());
 		}
-		
+
 
 		return jambledWord.ToString();
 	}
 
 }
+
